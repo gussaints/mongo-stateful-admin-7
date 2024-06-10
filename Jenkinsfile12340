@@ -1,0 +1,23 @@
+pipeline {
+  agent any
+  stages {
+
+    stage('beginning') {
+      steps {
+        sh '''echo "running adminmongo on port 12340"
+        '''
+      }
+    }
+
+    stage('Deploy stateful service gateway') {
+      steps {
+        withCredentials(bindings: [string(credentialsId: 'k8s-jnkns-srvr-account', variable: 'api_token')]) {
+          sh '''echo "mongodb yaml"
+          kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f adminmongo-12340.stateful.yaml
+          '''
+        }
+      }
+    }
+
+  }
+}
