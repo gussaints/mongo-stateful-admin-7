@@ -27,7 +27,7 @@ spec:
       volumes:
       - name: mongodb-24018-data
         hostPath:
-          path: /mnt/factorymongodb
+          path: /mnt/msft18
           type: DirectoryOrCreate
 ---
 apiVersion: v1

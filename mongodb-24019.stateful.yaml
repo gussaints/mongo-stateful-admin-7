@@ -27,7 +27,7 @@ spec:
       volumes:
       - name: mongodb-24019-data
         hostPath:
-          path: /mnt/factorymongodb
+          path: /mnt/msft19
           type: DirectoryOrCreate
 ---
 apiVersion: v1
