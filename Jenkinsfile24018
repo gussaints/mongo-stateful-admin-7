@@ -13,7 +13,7 @@ pipeline {
       steps {
         withCredentials(bindings: [string(credentialsId: 'k8s-jnkns-srvr-account', variable: 'api_token')]) {
           sh '''echo "mongodb yaml"
-          kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f mongodb-24017.stateful.yaml
+          kubectl --token $api_token --server https://192.168.49.2:8443 --insecure-skip-tls-verify=true apply -f mongodb-24018.stateful.yaml
           '''
         }
       }
