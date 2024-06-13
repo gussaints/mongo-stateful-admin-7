@@ -1,3 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-24018-config
+  labels:
+    app: mongodb-24018
+data:
+  mongod.conf: |-
+    # Configuración de mongod.conf
+
+    systemLog:
+      path: /var/log/mongodb/mongod.log
+
+    storage:
+      dbPath: /data/db
+
+    processManagement:
+      fork: true
+      port: 27017
+
+    replication:
+      replSetName: rs0
+
+    # Opciones adicionales
+
+    replSetInit:
+      - rs0:
+          bindIp: localhost,mongo2
+          initialSync:
+            details:
+              serverName: mongo2
+              repl:
+                sourceOplog: true
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -18,6 +52,7 @@ spec:
       containers:
       - name: mongodb-24018
         image: mongo:7.0
+        command: ["mongod", "--replSet", "rs0", "--bind_ip", "localhost,mongo2"]
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 27017
