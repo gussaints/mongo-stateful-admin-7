@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb-24019-set
+  labels:
+    app: mongodb-24019
+spec:
+  serviceName: "mongodb-24019-srvc"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mongodb-24019
+  template:
+    metadata:
+      labels:
+        app: mongodb-24019
+    spec:
+      containers:
+      - name: mongodb-24019
+        image: mongo:7.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongodb-24019-data
+          mountPath: /data/db
+      volumes:
+      - name: mongodb-24019-data
+        hostPath:
+          path: /mnt/factorymongodb
+          type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-24019-srvc
+  labels:
+    app: mongodb-24019
+spec:
+  # type: LoadBalancer
+  type: NodePort
+  selector:
+    app: mongodb-24019
+  ports:
+    - protocol: TCP
+      name: mongodb-24019
+      port: 24019
+      # By default and for convenience, the `targetPort` is set to
+      # the same value as the `port` field.
+      targetPort: 27017
+      # Optional field
+      # By default and for convenience, the Kubernetes control plane
+      # will allocate a port from a range (default: 30000-32767)
+#      nodePort: 32123
